@@ -3,9 +3,10 @@ import { Platform } from 'react-native';
 
 const configuredUrl = process.env.EXPO_PUBLIC_API_URL;
 const defaultHost = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
-export const API_BASE_URL = Platform.OS === 'web'
-  ? '/api'
-  : (configuredUrl || `http://${defaultHost}:4000/api`).replace(/\/$/, '');
+const fallbackUrl = configuredUrl || `http://${defaultHost}:4000/api`;
+export const API_BASE_URL = typeof window !== 'undefined'
+  ? `${window.location.origin}/api`
+  : fallbackUrl.replace(/\/$/, '');
 
 const api = axios.create({ baseURL: API_BASE_URL, timeout: 15000 });
 let authToken = null;
