@@ -13,7 +13,7 @@ ShopKart is an Amazon-inspired shopping app with original branding. It includes 
 
 ## Requirements
 
-- Node.js 20.19.4 or newer and npm
+- Node.js 22.13.0 or newer and npm
 - A Neon PostgreSQL database
 - Expo Go for non-payment development; native Android/iOS tooling for Razorpay checkout
 

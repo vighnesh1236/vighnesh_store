@@ -18,7 +18,14 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
 const app = express();
 const publicDirectory = fileURLToPath(new URL('../public/', import.meta.url));
 app.set('trust proxy', 1);
-app.use(helmet({ contentSecurityPolicy: { directives: { imgSrc: ["'self'", 'data:', 'https:'] } } }));
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      connectSrc: ["'self'", 'https:'],
+      imgSrc: ["'self'", 'data:', 'https:']
+    }
+  }
+}));
 const configuredOrigins = (process.env.CORS_ORIGIN ?? '*').split(',').map((origin) => origin.trim());
 app.use(cors({ origin: configuredOrigins.length === 1 ? configuredOrigins[0] : configuredOrigins }));
 app.use(express.json({ limit: '1mb' }));

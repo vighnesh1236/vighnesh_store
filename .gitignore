@@ -3,6 +3,5 @@ node_modules/
 .expo/
 dist/
 web-build/
-backend/public/
 *.log
 .DS_Store
