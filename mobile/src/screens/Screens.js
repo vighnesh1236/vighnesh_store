@@ -395,13 +395,13 @@ export function CheckoutScreen({ navigation }) {
       </Pressable>)}
       {!addresses.length && <><Text style={styles.muted}>Add an address to continue.</Text><Button title="Add delivery address" secondary onPress={() => navigation.navigate('Addresses')} /></>}
       <Text style={[styles.sectionTitle, { marginTop: 22, marginBottom: 10 }]}>2. Payment method</Text>
-      {[['cod', 'Cash on delivery'], ['razorpay', 'Pay online · Razorpay test mode']].map(([value, label]) =>
+      {[['cod', 'Cash on delivery'], ...(Platform.OS === 'web' ? [] : [['razorpay', 'Pay online · Razorpay test mode']])].map(([value, label]) =>
         <Pressable key={value} onPress={() => setMethod(value)} style={styles.paymentRow}><Text style={styles.bold}>{method === value ? '◉' : '○'}  {label}</Text></Pressable>)}
       <Text style={[styles.sectionTitle, { marginTop: 22, marginBottom: 10 }]}>3. Order summary</Text>
       <View style={styles.summaryCard}><Text style={styles.summaryLine}>Items subtotal <Text>{money(cart?.subtotal)}</Text></Text><Text style={styles.summaryLine}>Delivery <Text>{delivery ? money(delivery) : 'FREE'}</Text></Text><View style={styles.divider} /><Text style={styles.summaryTotal}>Order total  {money(Number(cart?.subtotal || 0) + delivery)}</Text></View>
       <ErrorBox message={error} onRetry={error.includes('address') ? () => navigation.navigate('Addresses') : undefined} />
       <Button title={busy ? 'Placing order...' : 'Place your order'} disabled={busy || !cart?.items?.length || !selected} onPress={placeOrder} style={{ marginTop: 12 }} />
-      <Text style={[styles.mutedSmall, { textAlign: 'center', marginTop: 12 }]}>Online payments are confirmed by Razorpay before your order is marked paid.</Text>
+      {Platform.OS !== 'web' && <Text style={[styles.mutedSmall, { textAlign: 'center', marginTop: 12 }]}>Online payments are confirmed by Razorpay before your order is marked paid.</Text>}
     </>}
   </ScrollView></Screen>;
 }

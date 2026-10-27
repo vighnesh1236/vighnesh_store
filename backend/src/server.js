@@ -1,4 +1,7 @@
 import 'dotenv/config';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -13,6 +16,7 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
 }
 
 const app = express();
+const publicDirectory = fileURLToPath(new URL('../public/', import.meta.url));
 app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: { directives: { imgSrc: ["'self'", 'data:', 'https:'] } } }));
 const configuredOrigins = (process.env.CORS_ORIGIN ?? '*').split(',').map((origin) => origin.trim());
@@ -23,8 +27,14 @@ app.get('/health', asyncRoute(async (_req, res) => {
   await query('SELECT 1');
   res.json({ status: 'ok', database: 'connected' });
 }));
+app.use(express.static(publicDirectory));
 app.use('/store', publicStoreRouter);
 app.use('/api', apiRouter);
+app.get('*', (req, res, next) => {
+  const indexFile = path.join(publicDirectory, 'index.html');
+  if (req.accepts('html') && existsSync(indexFile)) return res.sendFile(indexFile);
+  return next();
+});
 app.use((req, res) => res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` }));
 app.use((error, _req, res, _next) => {
   console.error(error);

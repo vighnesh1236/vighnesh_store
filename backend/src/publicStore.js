@@ -58,7 +58,7 @@ function publicStoreUrl(req) {
   const renderUrl = process.env.RENDER_EXTERNAL_URL;
   const url = configuredUrl
     ? new URL(configuredUrl)
-    : new URL('/store', renderUrl || `${req.protocol}://${req.get('host')}`);
+    : new URL('/', renderUrl || `${req.protocol}://${req.get('host')}`);
   if (url.protocol !== 'https:' && url.protocol !== 'http:') {
     throw new Error('PUBLIC_STORE_URL must use HTTP or HTTPS');
   }

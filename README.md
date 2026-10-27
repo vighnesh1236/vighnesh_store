@@ -102,7 +102,9 @@ The root `render.yaml` is a Render Blueprint for the Express API. It uses Render
 
 Add `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` as backend environment variables in Render only if enabling online payments. Use test-mode credentials while developing.
 
-The public product catalog is available at `https://<your-render-service>.onrender.com/store`. It shows active products in a mobile-friendly browser page and includes a downloadable QR code that opens the catalog. The QR uses the Render service URL by default; optionally set `PUBLIC_STORE_URL` in Render to the exact HTTPS `/store` URL if you use a custom domain or want to pin the QR destination.
+The full browser app is available at `https://<your-render-service>.onrender.com`. Visitors can browse products, create an account or sign in, manage a cart and addresses, and place cash-on-delivery orders. The catalog-only page remains available at `/store`; its downloadable QR links to the full browser app. Browser checkout currently offers cash on delivery. Razorpay checkout is available in the native mobile app only. A public app-download listing is not configured.
+
+Render builds the browser app from `mobile/` as part of the backend build. When configuring a Web Service manually, use `backend` as the root directory, `npm ci && npm run build` as the build command, `npm start` as the start command, and `/health` as the health check path.
 
 ## Razorpay test mode
 

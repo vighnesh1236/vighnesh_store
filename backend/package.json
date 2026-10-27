@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "npm ci --prefix ../mobile && npm --prefix ../mobile run build:web",
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "node --test",
